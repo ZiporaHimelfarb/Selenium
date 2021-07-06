@@ -29,6 +29,7 @@ public class Test {
         String CurrentTop = element.getCssValue("top");
         return (!top.equals(CurrentTop));
 	}
+	
 	public static void main(String[] args) 
 	{
 		System.setProperty("webdriver.chrome.driver", "C:/Projects/Selenium/chromedriver.exe");
