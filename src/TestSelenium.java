@@ -32,7 +32,8 @@ public class TestSelenium {
 		System.setProperty("webdriver.chrome.driver", "C:/Projects/Selenium/chromedriver.exe");
 		ChromeOptions ops = new ChromeOptions();
         ops.addArguments("--disable-notifications");
-		WebDriver driver = new ChromeDriver();
+        ops.addArguments("--disable-default-apps");
+        WebDriver driver = new ChromeDriver();
 		JavascriptExecutor executor = (JavascriptExecutor)driver;
 		//google search
 		driver.get("https://www.google.com/");
