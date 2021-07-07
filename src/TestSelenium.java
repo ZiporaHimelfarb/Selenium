@@ -1,23 +1,19 @@
 
 import org.openqa.selenium.By;
-
-import java.awt.Dimension;
-import java.util.List;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.interactions.HasInputDevices;
-import org.openqa.selenium.interactions.Locatable;
-import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.junit.Test;
 
-public class Test {
+public class TestSelenium {
 	public static boolean checkMoving(WebDriver driver) {
+		
 		WebDriverWait w = new WebDriverWait(driver, 10);
 		WebElement element = w.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div[5]/div[1]/div[2]/div[3]/div/section/div[2]/div")));
         String top = element.getCssValue("top");
@@ -27,11 +23,12 @@ public class Test {
         	catch(InterruptedException ie){
         	}
         String CurrentTop = element.getCssValue("top");
+        System.out.println(top+" "+CurrentTop);
         return (!top.equals(CurrentTop));
 	}
 	
-	public static void main(String[] args) 
-	{
+	@Test	
+	public void StartTest() {
 		System.setProperty("webdriver.chrome.driver", "C:/Projects/Selenium/chromedriver.exe");
 		ChromeOptions ops = new ChromeOptions();
         ops.addArguments("--disable-notifications");
@@ -47,9 +44,7 @@ public class Test {
 	    WebElement element =w.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='search']//a")));
 	    driver.get(element.getAttribute("href"));
 	    if(!driver.getCurrentUrl().contains("hidabroot.org")) return;
-	    	    
-	    //set windows size
-	    driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920, 1080));
+	    	   
 	    //find any article
 	    driver.get(driver.findElements(By.xpath("//article//a")).get(0).getAttribute("href"));
 	    //open comment
@@ -70,11 +65,13 @@ public class Test {
         if(checkMoving(driver) == false) return;
         //stop moving
         element = w.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div[5]/div[1]/div[2]/div[3]/div/section/div[2]")));
-        Locatable hoverItem = (Locatable) element;
-        Mouse mouse = ((HasInputDevices) driver).getMouse();
-        mouse.mouseMove(hoverItem.getCoordinates());
+        Actions builder = new Actions(driver);
+        Action mouseOver = builder.moveToElement(element).build();
+        mouseOver.perform();
         if(checkMoving(driver) == true) return;
         
+        //set windows size
+	    driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920, 1080));
         //weather:
         //I don't have weather here, so I did it with the day's times
 	    executor.executeScript("window.scrollTo(0, 0);");
@@ -94,12 +91,14 @@ public class Test {
         WebElement li= ul.findElements(By.tagName("li")).get(0);
         li.click();
         try{
-        	Thread.sleep(1000);
+        	Thread.sleep(2000);
         	}
         	catch(InterruptedException ie){
         	}
         timeText = driver.findElement(By.xpath("/html/body/div[2]/div[5]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[2]/div[2]/div[1]/ul/li[1]/span"));
         System.out.println(timeText.getAttribute("innerHTML"));
+        
+        driver.quit();   	   
 	}
 
 }
