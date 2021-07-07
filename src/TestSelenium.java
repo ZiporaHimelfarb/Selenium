@@ -1,6 +1,8 @@
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -26,13 +28,28 @@ public class TestSelenium {
         System.out.println(top+" "+CurrentTop);
         return (!top.equals(CurrentTop));
 	}
+	public void alertPresent(WebDriver driver) 
+	{ 
+	    try 
+	    { 
+	        driver.switchTo().alert();
+	        Alert alert = driver.switchTo().alert();
+	    	alert.accept();
+	    }   
+	    catch (NoAlertPresentException Ex) 
+	    { 
+	        
+	    }
 	
+	}
 	@Test	
 	public void StartTest() {
 		System.setProperty("webdriver.chrome.driver", "C:/Projects/Selenium/chromedriver.exe");
 		ChromeOptions ops = new ChromeOptions();
         ops.addArguments("--disable-notifications");
         ops.addArguments("--disable-default-apps");
+        ops.addArguments("--disable-popup-blocking");
+
         WebDriver driver = new ChromeDriver();
 		JavascriptExecutor executor = (JavascriptExecutor)driver;
 		//google search
@@ -55,6 +72,7 @@ public class TestSelenium {
 	    //send empty comment
 	    executor.executeScript("arguments[0].scrollIntoView(true); window.scrollBy(0, -window.innerHeight / 4);", element);
 	    executor.executeScript("arguments[0].click()", element);
+	    alertPresent(driver);
 	    WebElement btn = w.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[1]/div/div/div[4]/div/div[1]/div[4]/div/div[1]/form/div[1]/button")));
 	    btn.click();
 	    int errors = driver.findElements(By.className("inp_bubble")).size();
